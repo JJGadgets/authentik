@@ -12,6 +12,18 @@ import PFLogin from "@patternfly/patternfly/components/Login/login.css";
 import PFTitle from "@patternfly/patternfly/components/Title/title.css";
 import PFBase from "@patternfly/patternfly/patternfly-base.css";
 
+import {shouldPolyfill} from '@formatjs/intl-listformat/should-polyfill'
+async function polyfill(locale: string) {
+  const unsupportedLocale = shouldPolyfill(locale)
+  // This locale is supported
+  if (!unsupportedLocale) {
+    return
+  }
+  // Load the polyfill 1st BEFORE loading data
+  await import('@formatjs/intl-listformat/polyfill-force')
+  await import(`@formatjs/intl-listformat/locale-data/${unsupportedLocale}`)
+}
+
 import {
     IdentificationChallenge,
     IdentificationChallengeResponseRequest,
